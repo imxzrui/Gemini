@@ -1,7 +1,7 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: William Blake Galbreath <blake.galbreath@gmail.com>
 Date: Thu, 9 May 2019 18:09:43 -0500
-Subject: [PATCH] Purpur config files
+Subject: [PATCH] Gemini config files
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
@@ -13,7 +13,7 @@ index 8433c3ac440faa969069d1929b8b77fcb1080be7..4a8f95670e25c81952cccbaf4c6e4951
              // Only start Metrics, if it's enabled in the config
              if (config.getBoolean("enabled", true)) {
 -                Metrics metrics = new Metrics("Pufferfish", serverUUID, logFailedRequests, Bukkit.getLogger()); // Pufferfish
-+                Metrics metrics = new Metrics("Purpur", serverUUID, logFailedRequests, Bukkit.getLogger()); // Pufferfish // Purpur
++                Metrics metrics = new Metrics("Gemini", serverUUID, logFailedRequests, Bukkit.getLogger()); // Pufferfish // Gemini
  
                  metrics.addCustomChart(new Metrics.SimplePie("minecraft_version", () -> {
                      String minecraftVersion = Bukkit.getVersion();
@@ -31,8 +31,8 @@ index 8433c3ac440faa969069d1929b8b77fcb1080be7..4a8f95670e25c81952cccbaf4c6e4951
 -                    paperVersion = "unknown";
 -                }
 -                metrics.addCustomChart(new Metrics.SimplePie("pufferfish_version", () -> paperVersion)); // Pufferfish
-+                metrics.addCustomChart(new Metrics.SimplePie("online_mode", () -> Bukkit.getOnlineMode() ? "online" : (io.papermc.paper.configuration.GlobalConfiguration.get().proxies.isProxyOnlineMode() ? "bungee" : "offline"))); // Purpur
-+                metrics.addCustomChart(new Metrics.SimplePie("purpur_version", () -> (org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() != null) ? org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() : "unknown")); // Purpur
++                metrics.addCustomChart(new Metrics.SimplePie("online_mode", () -> Bukkit.getOnlineMode() ? "online" : (io.papermc.paper.configuration.GlobalConfiguration.get().proxies.isProxyOnlineMode() ? "bungee" : "offline"))); // Gemini
++                metrics.addCustomChart(new Metrics.SimplePie("Gemini_version", () -> (org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() != null) ? org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() : "unknown")); // Gemini
  
                  metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
                      Map<String, Map<String, Integer>> map = new HashMap<>();
@@ -44,7 +44,7 @@ index 13bd145b1e8006a53c22f5dc0c78f29b540c7663..ae2d9c91afe13d07fd0de6d455b90a2a
          }
      }
  
-+    // Purpur start
++    // Gemini start
 +    public void sendSuccess(@Nullable String message) {
 +        sendSuccess(message, false);
 +    }
@@ -66,7 +66,7 @@ index 13bd145b1e8006a53c22f5dc0c78f29b540c7663..ae2d9c91afe13d07fd0de6d455b90a2a
 +        }
 +        sendSuccess(() -> io.papermc.paper.adventure.PaperAdventure.asVanilla(message), broadcastToOps);
 +    }
-+    // Purpur end
++    // Gemini end
 +
      public void sendSuccess(Supplier<Component> feedbackSupplier, boolean broadcastToOps) {
          boolean flag1 = this.source.acceptsSuccess() && !this.silent;
@@ -79,15 +79,15 @@ index d62f7375394409a278bc565c8263506c598ceeba..2a7fd4420467cce0c4ddca749955ba45
          io.papermc.paper.command.PaperCommands.registerCommands(this); // Paper - setup /paper command
          this.server.spark.registerCommandBeforePlugins(this.server); // Paper - spark
          com.destroystokyo.paper.Metrics.PaperMetrics.startMetrics(); // Paper - start metrics
-+        // Purpur start
++        // Gemini start
 +        try {
-+            org.purpurmc.purpur.PurpurConfig.init((java.io.File) options.valueOf("purpur-settings"));
++            org.Geminimc.Gemini.GeminiConfig.init((java.io.File) options.valueOf("Gemini-settings"));
 +        } catch (Exception e) {
 +            DedicatedServer.LOGGER.error("Unable to load server configuration", e);
 +            return false;
 +        }
-+        org.purpurmc.purpur.PurpurConfig.registerCommands();
-+        // Purpur end
++        org.Geminimc.Gemini.GeminiConfig.registerCommands();
++        // Gemini end
          com.destroystokyo.paper.VersionHistoryManager.INSTANCE.getClass(); // Paper - load version history now
          gg.pufferfish.pufferfish.PufferfishConfig.load(); // Pufferfish
          gg.pufferfish.pufferfish.PufferfishCommand.init(); // Pufferfish
@@ -99,7 +99,7 @@ index 6470f145e2470574a40ddce6ca5bf924c1bb094c..31ec722cfb102eaea5511aca07a48e4a
      // Paper end - add paper world config
  
      public final com.destroystokyo.paper.antixray.ChunkPacketBlockController chunkPacketBlockController; // Paper - Anti-Xray
-+    public final org.purpurmc.purpur.PurpurWorldConfig purpurConfig; // Purpur
++    public final org.Geminimc.Gemini.GeminiWorldConfig GeminiConfig; // Gemini
      public static BlockPos lastPhysicsProblem; // Spigot
      private org.spigotmc.TickLimiter entityLimiter;
      private org.spigotmc.TickLimiter tileLimiter;
@@ -107,7 +107,7 @@ index 6470f145e2470574a40ddce6ca5bf924c1bb094c..31ec722cfb102eaea5511aca07a48e4a
          // Paper end - getblock optimisations - cache world height/sections
          this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName()); // Spigot
          this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper - create paper world config
-+        this.purpurConfig = new org.purpurmc.purpur.PurpurWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName(), env); // Purpur
++        this.GeminiConfig = new org.Geminimc.Gemini.GeminiWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName(), env); // Gemini
          this.generator = gen;
          this.world = new CraftWorld((ServerLevel) this, gen, biomeProvider, env);
  
@@ -119,7 +119,7 @@ index 97b5d6ba2b19a7c730730c74175a29157aed1840..ac83ec97e5a55d2184c0c0d64b9b340f
  
          org.spigotmc.SpigotConfig.init((File) this.console.options.valueOf("spigot-settings")); // Spigot
          this.console.paperConfigurations.reloadConfigs(this.console);
-+        org.purpurmc.purpur.PurpurConfig.init((File) console.options.valueOf("purpur-settings")); // Purpur
++        org.Geminimc.Gemini.GeminiConfig.init((File) console.options.valueOf("Gemini-settings")); // Gemini
          for (ServerLevel world : this.console.getAllLevels()) {
              // world.serverLevelData.setDifficulty(config.difficulty); // Paper - per level difficulty
              world.setSpawnSettings(world.serverLevelData.getDifficulty() != Difficulty.PEACEFUL && config.spawnMonsters); // Paper - per level difficulty (from MinecraftServer#setDifficulty(ServerLevel, Difficulty, boolean))
@@ -127,7 +127,7 @@ index 97b5d6ba2b19a7c730730c74175a29157aed1840..ac83ec97e5a55d2184c0c0d64b9b340f
                  }
              }
              world.spigotConfig.init(); // Spigot
-+            world.purpurConfig.init(); // Purpur
++            world.GeminiConfig.init(); // Gemini
          }
  
          Plugin[] pluginClone = pluginManager.getPlugins().clone(); // Paper
@@ -135,7 +135,7 @@ index 97b5d6ba2b19a7c730730c74175a29157aed1840..ac83ec97e5a55d2184c0c0d64b9b340f
          org.spigotmc.SpigotConfig.registerCommands(); // Spigot
          io.papermc.paper.command.PaperCommands.registerCommands(this.console); // Paper
          this.spark.registerCommandBeforePlugins(this); // Paper - spark
-+        org.purpurmc.purpur.PurpurConfig.registerCommands(); // Purpur
++        org.Geminimc.Gemini.GeminiConfig.registerCommands(); // Gemini
          this.overrideAllCommandBlockCommands = this.commandsConfiguration.getStringList("command-block-overrides").contains("*");
          this.ignoreVanillaPermissions = this.commandsConfiguration.getBoolean("ignore-vanilla-permissions");
  
@@ -143,17 +143,17 @@ index 97b5d6ba2b19a7c730730c74175a29157aed1840..ac83ec97e5a55d2184c0c0d64b9b340f
              return CraftServer.this.console.paperConfigurations.createLegacyObject(CraftServer.this.console);
          }
  
-+        // Purpur start
++        // Gemini start
 +        @Override
-+        public YamlConfiguration getPurpurConfig() {
-+            return org.purpurmc.purpur.PurpurConfig.config;
++        public YamlConfiguration getGeminiConfig() {
++            return org.Geminimc.Gemini.GeminiConfig.config;
 +        }
 +
 +        @Override
 +        public java.util.Properties getServerProperties() {
 +            return getProperties().properties;
 +        }
-+        // Purpur end
++        // Gemini end
 +
          @Override
          public void restart() {
@@ -166,24 +166,24 @@ index 1c2439ffc1e407ff69286817d22f127470ce07ba..ae274a56f7cb6200b3c556ed61254bb2
                          .describedAs("Jar file");
                  // Paper end
  
-+                // Purpur Start
-+                acceptsAll(asList("purpur", "purpur-settings"), "File for purpur settings")
++                // Gemini Start
++                acceptsAll(asList("Gemini", "Gemini-settings"), "File for Gemini settings")
 +                    .withRequiredArg()
 +                    .ofType(File.class)
-+                    .defaultsTo(new File("purpur.yml"))
++                    .defaultsTo(new File("Gemini.yml"))
 +                    .describedAs("Yml file");
-+                // Purpur end
++                // Gemini end
 +
                  // Paper start
                  acceptsAll(asList("server-name"), "Name of the server")
                          .withRequiredArg()
-diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
+diff --git a/src/main/java/org/Geminimc/Gemini/GeminiConfig.java b/src/main/java/org/Geminimc/Gemini/GeminiConfig.java
 new file mode 100644
 index 0000000000000000000000000000000000000000..c2991c34fd4306fae79fca2c1349c826b3247c49
 --- /dev/null
-+++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
++++ b/src/main/java/org/Geminimc/Gemini/GeminiConfig.java
 @@ -0,0 +1,178 @@
-+package org.purpurmc.purpur;
++package org.Geminimc.Gemini;
 +
 +import com.google.common.base.Throwables;
 +import com.google.common.collect.ImmutableMap;
@@ -210,8 +210,8 @@ index 0000000000000000000000000000000000000000..c2991c34fd4306fae79fca2c1349c826
 +import org.bukkit.configuration.ConfigurationSection;
 +import org.bukkit.configuration.InvalidConfigurationException;
 +import org.bukkit.configuration.file.YamlConfiguration;
-+import org.purpurmc.purpur.command.PurpurCommand;
-+import org.purpurmc.purpur.task.TPSBarTask;
++import org.Geminimc.Gemini.command.GeminiCommand;
++import org.Geminimc.Gemini.task.TPSBarTask;
 +
 +import java.io.File;
 +import java.io.IOException;
@@ -228,16 +228,16 @@ index 0000000000000000000000000000000000000000..c2991c34fd4306fae79fca2c1349c826
 +import java.util.logging.Level;
 +
 +@SuppressWarnings("unused")
-+public class PurpurConfig {
-+    private static final String HEADER = "This is the main configuration file for Purpur.\n"
++public class GeminiConfig {
++    private static final String HEADER = "This is the main configuration file for Gemini.\n"
 +            + "As you can see, there's tons to configure. Some options may impact gameplay, so use\n"
 +            + "with caution, and make sure you know what each option does before configuring.\n"
 +            + "\n"
-+            + "If you need help with the configuration or have any questions related to Purpur,\n"
++            + "If you need help with the configuration or have any questions related to Gemini,\n"
 +            + "join us in our Discord guild.\n"
 +            + "\n"
-+            + "Website: https://purpurmc.org \n"
-+            + "Docs: https://purpurmc.org/docs \n";
++            + "Website: https://Geminimc.org \n"
++            + "Docs: https://Geminimc.org/docs \n";
 +    private static File CONFIG_FILE;
 +    public static YamlConfiguration config;
 +
@@ -253,7 +253,7 @@ index 0000000000000000000000000000000000000000..c2991c34fd4306fae79fca2c1349c826
 +            config.load(CONFIG_FILE);
 +        } catch (IOException ignore) {
 +        } catch (InvalidConfigurationException ex) {
-+            Bukkit.getLogger().log(Level.SEVERE, "Could not load purpur.yml, please correct your syntax errors", ex);
++            Bukkit.getLogger().log(Level.SEVERE, "Could not load Gemini.yml, please correct your syntax errors", ex);
 +            throw Throwables.propagate(ex);
 +        }
 +        config.options().header(HEADER);
@@ -261,12 +261,12 @@ index 0000000000000000000000000000000000000000..c2991c34fd4306fae79fca2c1349c826
 +        verbose = getBoolean("verbose", false);
 +
 +        commands = new HashMap<>();
-+        commands.put("purpur", new PurpurCommand("purpur"));
++        commands.put("Gemini", new GeminiCommand("Gemini"));
 +
 +        version = getInt("config-version", 38);
 +        set("config-version", 38);
 +
-+        readConfig(PurpurConfig.class, null);
++        readConfig(GeminiConfig.class, null);
 +
 +        Block.BLOCK_STATE_REGISTRY.forEach(BlockBehaviour.BlockStateBase::initCache);
 +    }
@@ -283,7 +283,7 @@ index 0000000000000000000000000000000000000000..c2991c34fd4306fae79fca2c1349c826
 +
 +    public static void registerCommands() {
 +        for (Map.Entry<String, Command> entry : commands.entrySet()) {
-+            MinecraftServer.getServer().server.getCommandMap().register(entry.getKey(), "Purpur", entry.getValue());
++            MinecraftServer.getServer().server.getCommandMap().register(entry.getKey(), "Gemini", entry.getValue());
 +        }
 +    }
 +
@@ -361,13 +361,13 @@ index 0000000000000000000000000000000000000000..c2991c34fd4306fae79fca2c1349c826
 +        return builder.build();
 +    }
 +}
-diff --git a/src/main/java/org/purpurmc/purpur/PurpurWorldConfig.java b/src/main/java/org/purpurmc/purpur/PurpurWorldConfig.java
+diff --git a/src/main/java/org/Geminimc/Gemini/GeminiWorldConfig.java b/src/main/java/org/Geminimc/Gemini/GeminiWorldConfig.java
 new file mode 100644
 index 0000000000000000000000000000000000000000..42e502cfcb8d2e775cbf738773caf1a087d2f3f4
 --- /dev/null
-+++ b/src/main/java/org/purpurmc/purpur/PurpurWorldConfig.java
++++ b/src/main/java/org/Geminimc/Gemini/GeminiWorldConfig.java
 @@ -0,0 +1,93 @@
-+package org.purpurmc.purpur;
++package org.Geminimc.Gemini;
 +
 +import net.minecraft.core.registries.BuiltInRegistries;
 +import net.minecraft.resources.ResourceLocation;
@@ -381,11 +381,11 @@ index 0000000000000000000000000000000000000000..42e502cfcb8d2e775cbf738773caf1a0
 +import net.minecraft.world.level.block.Block;
 +import net.minecraft.world.level.block.Blocks;
 +import net.minecraft.world.level.block.state.properties.Tilt;
-+import org.purpurmc.purpur.tool.Flattenable;
-+import org.purpurmc.purpur.tool.Strippable;
-+import org.purpurmc.purpur.tool.Tillable;
-+import org.purpurmc.purpur.tool.Waxable;
-+import org.purpurmc.purpur.tool.Weatherable;
++import org.Geminimc.Gemini.tool.Flattenable;
++import org.Geminimc.Gemini.tool.Strippable;
++import org.Geminimc.Gemini.tool.Tillable;
++import org.Geminimc.Gemini.tool.Waxable;
++import org.Geminimc.Gemini.tool.Weatherable;
 +import org.apache.commons.lang.BooleanUtils;
 +import org.bukkit.ChatColor;
 +import org.bukkit.World;
@@ -396,15 +396,15 @@ index 0000000000000000000000000000000000000000..42e502cfcb8d2e775cbf738773caf1a0
 +import java.util.Map;
 +import java.util.function.Predicate;
 +import java.util.logging.Level;
-+import static org.purpurmc.purpur.PurpurConfig.log;
++import static org.Geminimc.Gemini.GeminiConfig.log;
 +
 +@SuppressWarnings("unused")
-+public class PurpurWorldConfig {
++public class GeminiWorldConfig {
 +
 +    private final String worldName;
 +    private final World.Environment environment;
 +
-+    public PurpurWorldConfig(String worldName, World.Environment environment) {
++    public GeminiWorldConfig(String worldName, World.Environment environment) {
 +        this.worldName = worldName;
 +        this.environment = environment;
 +        init();
@@ -412,65 +412,65 @@ index 0000000000000000000000000000000000000000..42e502cfcb8d2e775cbf738773caf1a0
 +
 +    public void init() {
 +        log("-------- World Settings For [" + worldName + "] --------");
-+        PurpurConfig.readConfig(PurpurWorldConfig.class, this);
++        GeminiConfig.readConfig(GeminiWorldConfig.class, this);
 +    }
 +
 +    private void set(String path, Object val) {
-+        PurpurConfig.config.addDefault("world-settings.default." + path, val);
-+        PurpurConfig.config.set("world-settings.default." + path, val);
-+        if (PurpurConfig.config.get("world-settings." + worldName + "." + path) != null) {
-+            PurpurConfig.config.addDefault("world-settings." + worldName + "." + path, val);
-+            PurpurConfig.config.set("world-settings." + worldName + "." + path, val);
++        GeminiConfig.config.addDefault("world-settings.default." + path, val);
++        GeminiConfig.config.set("world-settings.default." + path, val);
++        if (GeminiConfig.config.get("world-settings." + worldName + "." + path) != null) {
++            GeminiConfig.config.addDefault("world-settings." + worldName + "." + path, val);
++            GeminiConfig.config.set("world-settings." + worldName + "." + path, val);
 +        }
 +    }
 +
 +    private ConfigurationSection getConfigurationSection(String path) {
-+        ConfigurationSection section = PurpurConfig.config.getConfigurationSection("world-settings." + worldName + "." + path);
-+        return section != null ? section : PurpurConfig.config.getConfigurationSection("world-settings.default." + path);
++        ConfigurationSection section = GeminiConfig.config.getConfigurationSection("world-settings." + worldName + "." + path);
++        return section != null ? section : GeminiConfig.config.getConfigurationSection("world-settings.default." + path);
 +    }
 +
 +    private String getString(String path, String def) {
-+        PurpurConfig.config.addDefault("world-settings.default." + path, def);
-+        return PurpurConfig.config.getString("world-settings." + worldName + "." + path, PurpurConfig.config.getString("world-settings.default." + path));
++        GeminiConfig.config.addDefault("world-settings.default." + path, def);
++        return GeminiConfig.config.getString("world-settings." + worldName + "." + path, GeminiConfig.config.getString("world-settings.default." + path));
 +    }
 +
 +    private boolean getBoolean(String path, boolean def) {
-+        PurpurConfig.config.addDefault("world-settings.default." + path, def);
-+        return PurpurConfig.config.getBoolean("world-settings." + worldName + "." + path, PurpurConfig.config.getBoolean("world-settings.default." + path));
++        GeminiConfig.config.addDefault("world-settings.default." + path, def);
++        return GeminiConfig.config.getBoolean("world-settings." + worldName + "." + path, GeminiConfig.config.getBoolean("world-settings.default." + path));
 +    }
 +
 +    private double getDouble(String path, double def) {
-+        PurpurConfig.config.addDefault("world-settings.default." + path, def);
-+        return PurpurConfig.config.getDouble("world-settings." + worldName + "." + path, PurpurConfig.config.getDouble("world-settings.default." + path));
++        GeminiConfig.config.addDefault("world-settings.default." + path, def);
++        return GeminiConfig.config.getDouble("world-settings." + worldName + "." + path, GeminiConfig.config.getDouble("world-settings.default." + path));
 +    }
 +
 +    private int getInt(String path, int def) {
-+        PurpurConfig.config.addDefault("world-settings.default." + path, def);
-+        return PurpurConfig.config.getInt("world-settings." + worldName + "." + path, PurpurConfig.config.getInt("world-settings.default." + path));
++        GeminiConfig.config.addDefault("world-settings.default." + path, def);
++        return GeminiConfig.config.getInt("world-settings." + worldName + "." + path, GeminiConfig.config.getInt("world-settings.default." + path));
 +    }
 +
 +    private <T> List<?> getList(String path, T def) {
-+        PurpurConfig.config.addDefault("world-settings.default." + path, def);
-+        return PurpurConfig.config.getList("world-settings." + worldName + "." + path, PurpurConfig.config.getList("world-settings.default." + path));
++        GeminiConfig.config.addDefault("world-settings.default." + path, def);
++        return GeminiConfig.config.getList("world-settings." + worldName + "." + path, GeminiConfig.config.getList("world-settings.default." + path));
 +    }
 +
 +    private Map<String, Object> getMap(String path, Map<String, Object> def) {
-+        final Map<String, Object> fallback = PurpurConfig.getMap("world-settings.default." + path, def);
-+        final Map<String, Object> value = PurpurConfig.getMap("world-settings." + worldName + "." + path, null);
++        final Map<String, Object> fallback = GeminiConfig.getMap("world-settings.default." + path, def);
++        final Map<String, Object> value = GeminiConfig.getMap("world-settings." + worldName + "." + path, null);
 +        return value.isEmpty() ? fallback : value;
 +    }
 +}
-diff --git a/src/main/java/org/purpurmc/purpur/command/PurpurCommand.java b/src/main/java/org/purpurmc/purpur/command/PurpurCommand.java
+diff --git a/src/main/java/org/Geminimc/Gemini/command/GeminiCommand.java b/src/main/java/org/Geminimc/Gemini/command/GeminiCommand.java
 new file mode 100644
 index 0000000000000000000000000000000000000000..afdf04f8b22ad0b7c0b41675e44687b49c2f86d6
 --- /dev/null
-+++ b/src/main/java/org/purpurmc/purpur/command/PurpurCommand.java
++++ b/src/main/java/org/Geminimc/Gemini/command/GeminiCommand.java
 @@ -0,0 +1,65 @@
-+package org.purpurmc.purpur.command;
++package org.Geminimc.Gemini.command;
 +
 +import net.minecraft.server.MinecraftServer;
 +import net.minecraft.server.level.ServerLevel;
-+import org.purpurmc.purpur.PurpurConfig;
++import org.Geminimc.Gemini.GeminiConfig;
 +import org.bukkit.ChatColor;
 +import org.bukkit.Location;
 +import org.bukkit.command.Command;
@@ -482,12 +482,12 @@ index 0000000000000000000000000000000000000000..afdf04f8b22ad0b7c0b41675e44687b4
 +import java.util.stream.Collectors;
 +import java.util.stream.Stream;
 +
-+public class PurpurCommand extends Command {
-+    public PurpurCommand(String name) {
++public class GeminiCommand extends Command {
++    public GeminiCommand(String name) {
 +        super(name);
-+        this.description = "Purpur related commands";
-+        this.usageMessage = "/purpur [reload | version]";
-+        this.setPermission("bukkit.command.purpur");
++        this.description = "Gemini related commands";
++        this.usageMessage = "/Gemini [reload | version]";
++        this.setPermission("bukkit.command.Gemini");
 +    }
 +
 +    @Override
@@ -514,13 +514,13 @@ index 0000000000000000000000000000000000000000..afdf04f8b22ad0b7c0b41675e44687b4
 +            Command.broadcastCommandMessage(sender, ChatColor.RED + "If you encounter any issues please use the /stop command to restart your server.");
 +
 +            MinecraftServer console = MinecraftServer.getServer();
-+            PurpurConfig.init((File) console.options.valueOf("purpur-settings"));
++            GeminiConfig.init((File) console.options.valueOf("Gemini-settings"));
 +            for (ServerLevel level : console.getAllLevels()) {
-+                level.purpurConfig.init();
++                level.GeminiConfig.init();
 +            }
 +            console.server.reloadCount++;
 +
-+            Command.broadcastCommandMessage(sender, ChatColor.GREEN + "Purpur config reload complete.");
++            Command.broadcastCommandMessage(sender, ChatColor.GREEN + "Gemini config reload complete.");
 +        } else if (args[0].equalsIgnoreCase("version")) {
 +            Command verCmd = org.bukkit.Bukkit.getServer().getCommandMap().getCommand("version");
 +            if (verCmd != null) {
